@@ -2,5 +2,5 @@
 
 ## Launch command
 ```
-sudo python3 checker_internet.py -l
+sudo python3 app.py -l
 ```
