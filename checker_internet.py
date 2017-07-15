@@ -5,7 +5,7 @@ import logging
 
 from tools.periodic import TaskThread
 from internet.internet import check_internet_on
-from io.indicator import Indicator
+from ioexternal.indicator import Indicator
 
 
 ind = Indicator()
