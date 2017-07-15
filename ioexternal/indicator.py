@@ -8,7 +8,8 @@ class Indicator:
     LED_ALERT = 22
 
     def __init__(self):
-        logging.debug('init of indicator')
+        self.logger = logging.getLogger('app.ioexternal.Indicator')
+        self.logger.debug('init')
         self.warning = None
 
         GPIO.setmode(GPIO.BCM)
@@ -26,11 +27,11 @@ class Indicator:
             self._set_alert()
 
     def _set_ok(self):
-        logging.debug('Set indicator to OK')
+        self.logger.debug('Set indicator to OK')
         GPIO.output(self.LED_OK, GPIO.HIGH)
         GPIO.output(self.LED_ALERT, GPIO.LOW)
 
     def _set_alert(self):
-        logging.debug('Set indicator to alert')
+        self.logger.debug('Set indicator to alert')
         GPIO.output(self.LED_OK, GPIO.LOW)
         GPIO.output(self.LED_ALERT, GPIO.HIGH)

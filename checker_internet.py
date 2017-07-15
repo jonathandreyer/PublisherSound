@@ -8,12 +8,9 @@ from internet.internet import check_internet_on
 from ioexternal.indicator import Indicator
 
 
-ind = Indicator()
-
-
 def check_connectivity():
     res = check_internet_on()
-    logging.debug('Internet is reachable : ' + str(res))
+    logger.debug('Internet is reachable : ' + str(res))
 
     if res:
         ind.ok()
@@ -23,39 +20,45 @@ def check_connectivity():
 
 class PollingInternet(TaskThread):
     def task(self, **kwargs):
-        logging.debug('Task polling on internt : wake up!')
+        logger.debug('Task polling on internt : wake up!')
         check_connectivity()
 
 
-def print_and_log(msg=''):
-    print(msg)
-    logging.info(msg)
-
-
 if __name__ == "__main__":
+    logger = logging.getLogger('app')
+
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(message)s')
+
+    # Console output
+    consolelog = logging.StreamHandler()
+    consolelog.setFormatter(formatter)
+    logger.addHandler(consolelog)
+
     parser = argparse.ArgumentParser(description='Argument not valid!')
-    parser.add_argument('-d', '--delay', type=int, help='time between polling', default=15)
-    parser.add_argument('-l', '--log', help='Enable debug log', action='store_true')
+    parser.add_argument('-t', '--time', type=int, help='time between polling', default=15)
+    parser.add_argument('-d', '--debug', help='Enable debug log console', action='store_true')
     args = parser.parse_args()
 
-    if args.log:
-        logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
-    else:
-        logging.basicConfig(format='%(asctime)s %(message)s')
+    debug = bool(args.debug)
+    time = int(args.time)
+    if debug:
+        logger.setLevel(logging.DEBUG)
 
-    print_and_log()
-    print_and_log('-------------------------------')
-    print_and_log('-  Start polling service      -')
-    print_and_log('-------------------------------')
-    print_and_log()
-    print_and_log('Parameters:')
-    print_and_log(' # DELAY: ' + str(args.delay))
-    if args.log:
-        print_and_log(' # LOG:   enable')
-    print_and_log()
+    logger.info('')
+    logger.info('-------------------------------')
+    logger.info('-  Start polling service      -')
+    logger.info('-------------------------------')
+    logger.info('')
+    logger.info('Parameters:')
+    logger.info(' - DELAY: ' + str(time))
+    if args.debug:
+        logger.info(' - LOG:   enable')
+    logger.info('')
+
+    ind = Indicator()
 
     periodic_polling = PollingInternet()
-    periodic_polling.set_interval(args.delay)
+    periodic_polling.set_interval(time)
     periodic_polling.run()
 
     sys.exit()
