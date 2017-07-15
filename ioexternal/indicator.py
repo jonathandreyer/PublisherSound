@@ -12,6 +12,7 @@ class Indicator:
         self.logger.debug('init')
         self.warning = None
 
+        GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.LED_OK, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.LED_ALERT, GPIO.OUT, initial=GPIO.LOW)
@@ -25,6 +26,11 @@ class Indicator:
         if not self.warning or self.warning is None:
             self.warning = True
             self._set_alert()
+
+    def __del__(self):
+        self.logger.debug('del.')
+        GPIO.cleanup(self.LED_OK)
+        GPIO.cleanup(self.LED_ALERT)
 
     def _set_ok(self):
         self.logger.debug('Set indicator to OK')
