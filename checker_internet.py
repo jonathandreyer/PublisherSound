@@ -4,7 +4,7 @@ import argparse
 import logging
 
 from tools.periodic import TaskThread
-from internet.internet import check_internet_on
+from internet.check import check_internet_on
 from ioexternal.indicator import Indicator
 
 
