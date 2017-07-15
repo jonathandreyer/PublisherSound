@@ -13,7 +13,7 @@ ind = Indicator()
 
 def check_connectivity():
     res = check_internet_on()
-    logging.debug('Result check : ' + str(res))
+    logging.debug('Internet is reachable : ' + str(res))
 
     if res:
         ind.ok()
@@ -23,7 +23,7 @@ def check_connectivity():
 
 class PollingInternet(TaskThread):
     def task(self, **kwargs):
-        logging.debug('Task wake up!')
+        logging.debug('Task polling on internt : wake up!')
         check_connectivity()
 
 

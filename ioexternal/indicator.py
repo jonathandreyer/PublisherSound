@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 import RPi.GPIO as GPIO
 
 
@@ -7,7 +8,7 @@ class Indicator:
     LED_ALERT = 22
 
     def __init__(self):
-        print('init. Indicator object!')
+        logging.debug('init of indicator')
         self.warning = None
 
         GPIO.setmode(GPIO.BCM)
@@ -25,11 +26,11 @@ class Indicator:
             self._set_alert()
 
     def _set_ok(self):
-        print("Internet is OK")
+        logging.debug('Set indicator to OK')
         GPIO.output(self.LED_OK, GPIO.HIGH)
         GPIO.output(self.LED_ALERT, GPIO.LOW)
 
     def _set_alert(self):
-        print("Internet have something wrong!")
+        logging.debug('Set indicator to alert')
         GPIO.output(self.LED_OK, GPIO.LOW)
         GPIO.output(self.LED_ALERT, GPIO.HIGH)
