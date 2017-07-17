@@ -20,7 +20,7 @@ class TaskThread(threading.Thread):
         self._finished.set()
 
     def run(self):
-        while 1:
+        while True:
             if self._finished.isSet():
                 return
             self.task(**self._kwargs)

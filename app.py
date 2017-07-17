@@ -6,8 +6,11 @@ import logging
 from tools.periodic import TaskThread
 from internet.check import check_internet_on
 from ioexternal.indicator import Indicator
+from ioexternal.recorder import Recorder
+from ioexternal.audio import Audio
 
 
+# --- Check connectivity to internet
 def check_connectivity():
     res = check_internet_on()
     logger.debug('Internet is reachable : ' + str(res))
@@ -22,6 +25,21 @@ class PollingInternet(TaskThread):
     def task(self, **kwargs):
         logger.debug('Task polling on internt : wake up!')
         check_connectivity()
+
+
+# --- Recorder track
+def event_btn():
+    global state
+    state = False
+
+    logger.info('Event on channel')
+
+    if not state:
+        audio.start()
+    else:
+        audio.stop()
+
+    state = not state
 
 
 if __name__ == "__main__":
@@ -56,6 +74,8 @@ if __name__ == "__main__":
     logger.info('')
 
     ind = Indicator()
+    audio = Audio()
+    rec = Recorder(event_btn)
 
     periodic_polling = PollingInternet()
     periodic_polling.set_interval(time)
