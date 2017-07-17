@@ -2,5 +2,5 @@
 
 ## Launch command
 ```
-sudo python3 app.py -l
+sudo python3 app.py -d
 ```
