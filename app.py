@@ -4,6 +4,7 @@ import argparse
 import logging
 
 from tools.periodic import TaskThread
+from tools.static_var import static_vars
 from internet.check import check_internet_on
 from ioexternal.indicator import Indicator
 from ioexternal.recorder import Recorder
@@ -28,18 +29,16 @@ class PollingInternet(TaskThread):
 
 
 # --- Recorder track
+@static_vars(state_rec=False)
 def event_btn():
-    global state
-    state = False
-
     logger.info('Event on channel')
 
-    if not state:
+    if not state_rec:
         audio.start()
     else:
         audio.stop()
 
-    state = not state
+    state_rec = not state_rec
 
 
 if __name__ == "__main__":
