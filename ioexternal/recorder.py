@@ -15,7 +15,7 @@ class Recorder:
         GPIO.setmode(GPIO.BCM)
 
         GPIO.setup(self.GPIO_BTN, GPIO.IN)
-        GPIO.add_event_detect(self.GPIO_BTN, GPIO.RISING, callback=self._func, bouncetime=25)
+        GPIO.add_event_detect(self.GPIO_BTN, GPIO.FALLING, callback=self._func, bouncetime=25)
 
     def __del__(self):
         self.logger.debug('del.')
@@ -37,8 +37,7 @@ if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
 
     def event(channel):
-        logger.info('hello from event % ', channel)
-        print('hello')
+        logger.info('hello from event %s' % channel)
 
     rec = Recorder(event)
 
