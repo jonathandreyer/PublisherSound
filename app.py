@@ -33,12 +33,12 @@ class PollingInternet(TaskThread):
 def event_btn():
     logger.info('Event on channel')
 
-    if not state_rec:
+    if not event_btn.state_rec:
         audio.start()
     else:
         audio.stop()
 
-    state_rec = not state_rec
+        event_btn.state_rec = not event_btn.state_rec
 
 
 if __name__ == "__main__":
