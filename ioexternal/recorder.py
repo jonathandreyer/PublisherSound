@@ -33,8 +33,8 @@ class Recorder:
 
     def _event(self, channel):
         self.logger.debug('event on channel %s' % channel)
-        #for fc in self._fcs:
-        self._fcs[0]()
+        for fc in self._fcs:
+            fc()
 
     def __del__(self):
         self.logger.debug('del.')
