@@ -55,8 +55,8 @@ if __name__ == "__main__":
     logger.addHandler(consolelog)
     logger.setLevel(logging.DEBUG)
 
-    def event(channel):
-        logger.info('hello from event %s' % channel)
+    def event():
+        logger.info('hello from event')
 
     rec = Recorder(event)
 
