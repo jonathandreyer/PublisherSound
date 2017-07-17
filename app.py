@@ -38,7 +38,7 @@ def event_btn():
     else:
         audio.stop()
 
-        event_btn.state_rec = not event_btn.state_rec
+    event_btn.state_rec = not event_btn.state_rec
 
 
 if __name__ == "__main__":
