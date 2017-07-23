@@ -11,7 +11,7 @@ from ioexternal.recorder import Recorder
 from ioexternal.audio import Audio
 
 
-# --- Check connectivity to internet
+# --- Check connectivity to internet ---
 def check_connectivity():
     res = check_internet_on()
     logger.debug('Internet is reachable : ' + str(res))
@@ -28,7 +28,7 @@ class PollingInternet(TaskThread):
         check_connectivity()
 
 
-# --- Recorder track
+# --- Recorder track ---
 @static_vars(state_rec=False)
 def event_btn():
     logger.info('Event on channel')

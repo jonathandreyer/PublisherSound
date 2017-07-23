@@ -64,4 +64,4 @@ if __name__ == "__main__":
         while True:
             time.sleep(10)
     except KeyboardInterrupt:
-        print('interrupted!')
+        logger.info('interrupted!')
