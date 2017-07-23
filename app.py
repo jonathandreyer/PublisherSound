@@ -37,6 +37,8 @@ def event_btn():
         audio.start()
     else:
         audio.stop()
+        track = audio.get_audio()
+        # TODO publish track in cloud
 
     event_btn.state_rec = not event_btn.state_rec
 
