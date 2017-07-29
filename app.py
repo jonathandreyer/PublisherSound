@@ -9,6 +9,7 @@ from internet.check import check_internet_on
 from ioexternal.indicator import Indicator
 from ioexternal.recorder import Recorder
 from ioexternal.audio import Audio
+from internet.publisher import Publisher
 
 
 # --- Check connectivity to internet ---
@@ -24,7 +25,7 @@ def check_connectivity():
 
 class PollingInternet(TaskThread):
     def task(self, **kwargs):
-        logger.debug('Task polling on internt : wake up!')
+        logger.debug('Task polling on internet : wake up!')
         check_connectivity()
 
 
@@ -37,8 +38,8 @@ def event_btn():
         audio.start()
     else:
         audio.stop()
-        track = audio.get_audio()
-        # TODO publish track in cloud
+        p = audio.get_path()
+        pub.post(p)
 
     event_btn.state_rec = not event_btn.state_rec
 
@@ -77,6 +78,7 @@ if __name__ == "__main__":
     ind = Indicator()
     audio = Audio()
     rec = Recorder(event_btn)
+    pub = Publisher(username='USERNAME_CLYP', password='PASSWORD_CLYP')
 
     periodic_polling = PollingInternet()
     periodic_polling.set_interval(time)
