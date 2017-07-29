@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import logging
-#import pyaudio
-#import wave
 import os
 from pydub import AudioSegment
 
