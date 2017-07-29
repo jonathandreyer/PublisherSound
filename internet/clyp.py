@@ -31,8 +31,12 @@ class Clyp:
         self._pass = password
 
     def post_track(self, track):
-        _id = self.post(track.path)
-        self.edit(_id, track.name, track.description)
+        try:
+            _id = self.post(track.path)
+            self.edit(_id, track.name, track.description)
+            return True
+        except:
+            return False
 
     def post(self, path_track):
         tok = self.get_token()
@@ -50,7 +54,10 @@ class Clyp:
                    'Origin': 'https://clyp.it'}
 
         r = requests.post(upload_url, headers=headers, files=send_files)
-        self.logger.info('Status code post : ' + str(r.status_code))
+        self.logger.debug('Status code post : ' + str(r.status_code))
+
+        if r.status_code != 200:
+            raise Exception('Error post track - Request is not valid')
 
         res = json.loads(r.text)
         return res['AudioFileId']
@@ -64,11 +71,14 @@ class Clyp:
         headers = {'Authorization': 'Bearer ' + tok,
                    'Content-Type': 'application/json'}
         r = requests.patch(track_url, headers=headers, json=data)
-        self.logger.info('Status code edit : ' + str(r.status_code))
+        self.logger.debug('Status code edit : ' + str(r.status_code))
+
+        if r.status_code != 200:
+            raise Exception('Error edit track - Request is not valid')
 
     def get_token(self):
         if not self._token.is_valid():
-            self.logger.debug('Token is not valid')
+            self.logger.debug('Request a new token')
 
             token_url = 'https://api.clyp.it/oauth2/token'
             headers = {'Authorization': 'Basic MjkzMTE5Og=='}
@@ -76,7 +86,10 @@ class Clyp:
                    urllib.request.quote(self._pass)
 
             r = requests.post(token_url, headers=headers, data=data)
-            self.logger.info('Status code token : ' + str(r.status_code))
+            self.logger.debug('Status code token : ' + str(r.status_code))
+
+            if r.status_code != 200:
+                raise Exception('Error authentication - Unable to get a token')
 
             token = json.loads(r.text)['access_token']
             expires_in = json.loads(r.text)['expires_in']
