@@ -18,5 +18,5 @@ class Audio:
     def stop(self):
         self.logger.info('stop audio')
 
-    def get_audio(self):
+    def get_path(self):
         pass
