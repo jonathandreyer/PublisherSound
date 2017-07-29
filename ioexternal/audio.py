@@ -2,6 +2,7 @@
 import logging
 import pyaudio
 import wave
+import os
 
 from tools.namesgenerator import get_random_name
 
@@ -89,31 +90,52 @@ class RecordingFile(object):
 
 
 class Audio:
-    def __init__(self):
+    def __init__(self, base_path=''):
         self.logger = logging.getLogger('app.ioexternal.Audio')
         self.logger.debug('init')
-        pass
+        self._rec = Recorder(channels=1)
+        self._record_file = None
+        self._path = ''
 
-    def __del__(self):
-        self.logger.debug('del.')
-        pass
+        if base_path == '':
+            self._base_path = os.getcwd()
+        else:
+            self._base_path = base_path
+
+    #def __del__(self):
+    #    self.logger.debug('del.')
 
     def start(self):
         self.logger.info('start audio')
 
+        if self._record_file is None:
+            self._path = os.path.join(self._base_path, get_random_name('-')) + '.wav'
+            self._record_file = self._rec.open(self._path)
+
+            self._record_file.start_recording()
+        else:
+            raise Exception('Track already open')
+
     def stop(self):
         self.logger.info('stop audio')
 
+        if self._record_file is not None:
+            self._record_file.stop_recording()
+        else:
+            raise Exception('Not recorded track')
+
     def get_path(self):
-        pass
+        return self._path
 
 
 if __name__ == '__main__':
     import time
 
-    rec = Recorder(channels=1)
-    filename = get_random_name('-')
-    with rec.open(filename + '.wav', 'wb') as recfile2:
-        recfile2.start_recording()
-        time.sleep(5.0)
-        recfile2.stop_recording()
+    a = Audio()
+
+    a.start()
+    time.sleep(7.5)
+    a.stop()
+
+    print(a.get_path())
+
