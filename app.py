@@ -13,11 +13,12 @@ from internet.publisher import Publisher
 
 
 # --- Check connectivity to internet ---
+@static_vars(state_cloud=False)
 def check_connectivity():
-    res = check_internet_on()
-    logger.debug('Internet is reachable : ' + str(res))
+    check_connectivity.state_cloud = check_internet_on()
+    logger.debug('Internet is reachable : ' + str(check_connectivity.state_cloud))
 
-    if res:
+    if check_connectivity.state_cloud:
         ind.cloud_ok()
     else:
         ind.cloud_alert()
@@ -34,18 +35,19 @@ class PollingInternet(TaskThread):
 def event_btn():
     logger.info('Event on channel')
 
-    if not event_btn.state_rec:
-        ind.record_start()
-        audio.start()
-    else:
-        audio.stop()
-        ind.record_end()
-        ind.publish_blink()
-        p = audio.get_path()
-        pub.post(p)
-        ind.publish_end()
+    if check_connectivity.state_cloud:
+        if not event_btn.state_rec:
+            ind.record_start()
+            audio.start()
+        else:
+            audio.stop()
+            ind.record_end()
+            ind.publish_blink()
+            p = audio.get_path()
+            pub.post(p)
+            ind.publish_end()
 
-    event_btn.state_rec = not event_btn.state_rec
+        event_btn.state_rec = not event_btn.state_rec
 
 
 if __name__ == "__main__":
