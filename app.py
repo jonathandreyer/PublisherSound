@@ -64,7 +64,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     debug = bool(args.debug)
-    time = int(args.time)
+    times = int(args.time)
     if debug:
         logger.setLevel(logging.DEBUG)
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     logger.info('-------------------------------')
     logger.info('')
     logger.info('Parameters:')
-    logger.info(' - DELAY: ' + str(time))
+    logger.info(' - DELAY: ' + str(times))
     if args.debug:
         logger.info(' - LOG:   enable')
     logger.info('')
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     pub = Publisher(username='USERNAME_CLYP', password='PASSWORD_CLYP')
 
     periodic_polling = PollingInternet()
-    periodic_polling.set_interval(time)
+    periodic_polling.set_interval(times)
     periodic_polling.run()
 
     sys.exit()
