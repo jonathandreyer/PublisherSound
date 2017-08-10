@@ -25,6 +25,12 @@ sudo apt-get install usbmuxd
 ```
 
 
+### Install requirement for python app
+```
+pip3 install -r requirements.txt
+```
+
+
 ### Script to launch at boot
 
 
