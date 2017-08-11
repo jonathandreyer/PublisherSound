@@ -13,14 +13,15 @@ from internet.publisher import Publisher
 
 
 # --- Check connectivity to internet ---
+@static_vars(state_cloud=False)
 def check_connectivity():
-    res = check_internet_on()
-    logger.debug('Internet is reachable : ' + str(res))
+    check_connectivity.state_cloud = check_internet_on()
+    logger.debug('Internet is reachable : ' + str(check_connectivity.state_cloud))
 
-    if res:
-        ind.ok()
+    if check_connectivity.state_cloud:
+        ind.cloud_ok()
     else:
-        ind.alert()
+        ind.cloud_alert()
 
 
 class PollingInternet(TaskThread):
@@ -34,14 +35,19 @@ class PollingInternet(TaskThread):
 def event_btn():
     logger.info('Event on channel')
 
-    if not event_btn.state_rec:
-        audio.start()
-    else:
-        audio.stop()
-        p = audio.get_path()
-        pub.post(p)
+    if check_connectivity.state_cloud:
+        if not event_btn.state_rec:
+            ind.record_start()
+            audio.start()
+        else:
+            audio.stop()
+            ind.record_end()
+            ind.publish_blink()
+            p = audio.get_path()
+            pub.post(p)
+            ind.publish_end()
 
-    event_btn.state_rec = not event_btn.state_rec
+        event_btn.state_rec = not event_btn.state_rec
 
 
 if __name__ == "__main__":
@@ -60,7 +66,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     debug = bool(args.debug)
-    time = int(args.time)
+    times = int(args.time)
     if debug:
         logger.setLevel(logging.DEBUG)
 
@@ -70,7 +76,7 @@ if __name__ == "__main__":
     logger.info('-------------------------------')
     logger.info('')
     logger.info('Parameters:')
-    logger.info(' - DELAY: ' + str(time))
+    logger.info(' - DELAY: ' + str(times))
     if args.debug:
         logger.info(' - LOG:   enable')
     logger.info('')
@@ -81,7 +87,7 @@ if __name__ == "__main__":
     pub = Publisher(username='USERNAME_CLYP', password='PASSWORD_CLYP')
 
     periodic_polling = PollingInternet()
-    periodic_polling.set_interval(time)
+    periodic_polling.set_interval(times)
     periodic_polling.run()
 
     sys.exit()
