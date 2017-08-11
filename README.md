@@ -40,7 +40,7 @@ EOF
 
 ### Install requirement for python app
 ```
-sudo apt-get install portaudio19-dev
+sudo apt-get install portaudio19-dev libav-tools
 pip3 install -r requirements.txt
 ```
 
