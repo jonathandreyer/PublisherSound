@@ -25,8 +25,22 @@ sudo apt-get install usbmuxd
 ```
 
 
+### Config USB sound adapter to default
+```
+cat > /etc/asound.conf << EOF
+pcm.!default  {
+ type hw card 1
+}
+ctl.!default {
+ type hw card 1
+}
+EOF
+```
+
+
 ### Install requirement for python app
 ```
+sudo apt-get install portaudio19-dev
 pip3 install -r requirements.txt
 ```
 
@@ -39,3 +53,8 @@ pip3 install -r requirements.txt
 ```
 sudo python3 app.py -d
 ```
+
+
+
+## Sources
+- *USB audio adapter* : https://learn.adafruit.com/usb-audio-cards-with-a-raspberry-pi/updating-alsa-config
