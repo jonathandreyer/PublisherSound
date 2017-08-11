@@ -10,6 +10,7 @@ from ioexternal.indicator import Indicator
 from ioexternal.recorder import Recorder
 from ioexternal.audio import Audio
 from internet.publisher import Publisher
+from ioexternal.track_process import TrackProcess
 
 
 # --- Check connectivity to internet ---
@@ -38,13 +39,19 @@ def event_btn():
     if check_connectivity.state_cloud:
         if not event_btn.state_rec:
             ind.record_start()
+
             audio.start()
         else:
             audio.stop()
+
             ind.record_end()
             ind.publish_blink()
+
             p = audio.get_path()
-            pub.post(p)
+            tp = TrackProcess().convert(path=p, remove_base=True)
+
+            pub.post(tp)
+
             ind.publish_end()
 
         event_btn.state_rec = not event_btn.state_rec

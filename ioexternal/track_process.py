@@ -11,15 +11,20 @@ class TrackProcess:
         self.logger = logging.getLogger('app.ioexternal.TrackProcess')
         self.logger.debug('init')
 
-    def convert(self, path):
+    def convert(self, path, remove_base=False):
         self.logger.debug('load track')
         song = AudioSegment.from_wav(path)
         self.logger.debug('fade (in/out) track')
-        track = song.fade_in(3000).fade_out(3500)
+        track = song.fade_in(700).fade_out(1000)
 
         self.logger.debug('export song')
         p = os.path.splitext(path)[0] + '.' + self.TRACK_FORMAT
         track.export(p, format=self.TRACK_FORMAT)
+
+        if remove_base:
+            os.remove(path)
+            self.logger.debug('Base track file is removed')
+
         return p
 
 
