@@ -15,7 +15,7 @@ class TrackProcess:
         self.logger.debug('load track')
         song = AudioSegment.from_wav(path)
         self.logger.debug('fade (in/out) track')
-        track = song.fade_in(3000).fade_out(3500)
+        track = song.fade_in(700).fade_out(1000)
 
         self.logger.debug('export song')
         p = os.path.splitext(path)[0] + '.' + self.TRACK_FORMAT
