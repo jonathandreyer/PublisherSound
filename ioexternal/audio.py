@@ -3,6 +3,7 @@ import logging
 import pyaudio
 import wave
 import os
+from ctypes import *
 
 from tools.namesgenerator import get_random_name
 
@@ -23,6 +24,15 @@ class Recorder(object):
                              self.frames_per_buffer)
 
 
+ERROR_HANDLER_FUNC = CFUNCTYPE(None, c_char_p, c_int, c_char_p, c_int, c_char_p)
+
+
+def py_error_handler(filename, line, function, err, fmt):
+    pass
+
+c_error_handler = ERROR_HANDLER_FUNC(py_error_handler)
+
+
 # From https://gist.github.com/sloria/5693955
 class RecordingFile(object):
     def __init__(self, fname, mode, channels,
@@ -32,6 +42,8 @@ class RecordingFile(object):
         self.channels = channels
         self.rate = rate
         self.frames_per_buffer = frames_per_buffer
+        asound = cdll.LoadLibrary('libasound.so')
+        asound.snd_lib_error_set_handler(c_error_handler)
         self._pa = pyaudio.PyAudio()
         self.wavefile = self._prepare_file(self.fname, self.mode)
         self._stream = None
