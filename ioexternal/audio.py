@@ -93,7 +93,7 @@ class Audio:
     def __init__(self, base_path=''):
         self.logger = logging.getLogger('app.ioexternal.Audio')
         self.logger.debug('init')
-        self._rec = Recorder(channels=1)
+        self._rec = Recorder(channels=1, rate=44100, frames_per_buffer=512)
         self._record_file = None
         self._path = ''
 
