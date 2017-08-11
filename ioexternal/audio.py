@@ -102,8 +102,11 @@ class Audio:
         else:
             self._base_path = base_path
 
-    #def __del__(self):
-    #    self.logger.debug('del.')
+    def __del__(self):
+        self.logger.debug('del.')
+
+        if self._record_file is not None:
+            self._record_file.close()
 
     def start(self):
         self.logger.info('start audio')
@@ -121,6 +124,7 @@ class Audio:
 
         if self._record_file is not None:
             self._record_file.stop_recording()
+            self._record_file.close()
 
             self._record_file = None
         else:
