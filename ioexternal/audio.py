@@ -4,6 +4,7 @@ import pyaudio
 import wave
 import os
 from ctypes import *
+from sys import platform as _platform
 
 from tools.namesgenerator import get_random_name
 
@@ -42,8 +43,12 @@ class RecordingFile(object):
         self.channels = channels
         self.rate = rate
         self.frames_per_buffer = frames_per_buffer
-        asound = cdll.LoadLibrary('libasound.so')
-        asound.snd_lib_error_set_handler(c_error_handler)
+
+        # Suppres console message of Alsa when run on linux
+        if _platform == "linux" or _platform == "linux2":
+            asound = cdll.LoadLibrary('libasound.so')
+            asound.snd_lib_error_set_handler(c_error_handler)
+
         self._pa = pyaudio.PyAudio()
         self.wavefile = self._prepare_file(self.fname, self.mode)
         self._stream = None
