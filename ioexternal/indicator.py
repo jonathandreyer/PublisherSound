@@ -86,3 +86,33 @@ class Indicator:
     def _clear_record(self):
         self.logger.debug('Set indicator to record OFF')
         GPIO.output(self.LED_RECORD, GPIO.LOW)
+
+
+if __name__ == "__main__":
+    import time
+
+    logger = logging.getLogger('app')
+
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(message)s')
+
+    # Console output
+    consolelog = logging.StreamHandler()
+    consolelog.setFormatter(formatter)
+    logger.addHandler(consolelog)
+    logger.setLevel(logging.DEBUG)
+
+    ind = Indicator()
+
+    ind.cloud_ok()
+    time.sleep(2)
+    ind.cloud_alert()
+    time.sleep(2)
+    ind.cloud_ok()
+
+    ind.publish_blink()
+    time.sleep(5)
+    ind.publish_end()
+
+    ind.record_start()
+    time.sleep(2)
+    ind.record_end()
