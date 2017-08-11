@@ -121,6 +121,8 @@ class Audio:
 
         if self._record_file is not None:
             self._record_file.stop_recording()
+
+            self._record_file = None
         else:
             raise Exception('Not recorded track')
 
@@ -135,6 +137,14 @@ if __name__ == '__main__':
 
     a.start()
     time.sleep(7.5)
+    a.stop()
+
+    print(a.get_path())
+
+    time.sleep(1)
+
+    a.start()
+    time.sleep(5)
     a.stop()
 
     print(a.get_path())
