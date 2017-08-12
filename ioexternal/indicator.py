@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
+import time
+from threading import Thread
 import RPi.GPIO as GPIO
 
 
@@ -15,6 +17,8 @@ class Indicator:
         self.warning = None
         self.publish = None
         self.record = None
+
+        self._var_blink = False
 
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
@@ -70,13 +74,26 @@ class Indicator:
         GPIO.output(self.LED_OK, GPIO.LOW)
         GPIO.output(self.LED_ALERT, GPIO.HIGH)
 
-    # TODO create task to blink
     def _publish_enable(self):
         self.logger.debug('Set indicator to publish Blink')
-        GPIO.output(self.LED_PUBLISH, GPIO.HIGH)
+        self._bt = BlinkThread(0.5, self._blink, self._end_blink)
+        self._bt.start()
 
     def _publish_end(self):
         self.logger.debug('Set indicator to publish Off')
+        self._bt.stop()
+
+    def _blink(self):
+        if self._var_blink:
+            self._var_blink = False
+            self.logger.debug('Set indicator to publish BlinkOff')
+            GPIO.output(self.LED_PUBLISH, GPIO.LOW)
+        else:
+            self._var_blink = True
+            self.logger.debug('Set indicator to publish BlinkOn')
+            GPIO.output(self.LED_PUBLISH, GPIO.HIGH)
+
+    def _end_blink(self):
         GPIO.output(self.LED_PUBLISH, GPIO.LOW)
 
     def _set_record(self):
@@ -86,6 +103,29 @@ class Indicator:
     def _clear_record(self):
         self.logger.debug('Set indicator to record OFF')
         GPIO.output(self.LED_RECORD, GPIO.LOW)
+
+
+class BlinkThread(Thread):
+    def __init__(self, dt, func, end_fonc):
+        self.logger = logging.getLogger('app.ioexternal.BlinkThread')
+        self.logger.debug('init')
+        super(BlinkThread, self).__init__()
+        self._keepgoing = True
+        self._time = dt
+        self._fc = func
+        self._end_fc = end_fonc
+
+    def run(self):
+        while self._keepgoing:
+            self.logger.debug('Exec function')
+            self._fc()
+            time.sleep(self._time)
+        self._end_fc()
+        self.logger.debug('End of run')
+
+    def stop(self):
+        self.logger.debug('Order to stop')
+        self._keepgoing = False
 
 
 if __name__ == "__main__":
