@@ -46,10 +46,30 @@ pip3 install -r requirements.txt
 
 
 ### Script to launch at boot
+1. Copy file *app_example.service* to *app.service*
+2. Edit with correct paths to repository (app & config file)
+3. Copy file *app.service* in */lib/systemd/system/*
+```
+sudo cp ./app.service /lib/systemd/system/
+sudo chmod 644 /lib/systemd/system/app.service
+chmod +x ./app.py
+```
+
+4. Activate it:
+```
+sudo systemctl daemon-reload
+sudo systemctl enable app.service
+sudo systemctl start app.service
+```
+
+5. *(Optional) Show status of app:*
+```
+sudo systemctl status app.service
+```
 
 
 ### Create config file with credential
-1. Copy *config_example.ini* to *config.ini*
+1. Copy file *config_example.ini* to *config.ini*
 2. Change *USERNAME_CLYP* & *PASSWORD_CLYP* with correct credential
 
 
@@ -62,3 +82,4 @@ sudo python3 app.py -d
 
 ## Sources
 - *USB audio adapter* : https://learn.adafruit.com/usb-audio-cards-with-a-raspberry-pi/updating-alsa-config
+- *Python app as service* : http://www.diegoacuna.me/how-to-run-a-script-as-a-service-in-raspberry-pi-raspbian-jessie/
