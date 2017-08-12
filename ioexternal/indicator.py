@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+from threading import Thread
 import RPi.GPIO as GPIO
 
 
@@ -15,6 +16,8 @@ class Indicator:
         self.warning = None
         self.publish = None
         self.record = None
+
+        self._var_blink = False
 
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
@@ -70,14 +73,22 @@ class Indicator:
         GPIO.output(self.LED_OK, GPIO.LOW)
         GPIO.output(self.LED_ALERT, GPIO.HIGH)
 
-    # TODO create task to blink
     def _publish_enable(self):
         self.logger.debug('Set indicator to publish Blink')
-        GPIO.output(self.LED_PUBLISH, GPIO.HIGH)
+        self._bt = BlinkThread(0.5, self._blink)
+        self._bt.start()
 
     def _publish_end(self):
         self.logger.debug('Set indicator to publish Off')
-        GPIO.output(self.LED_PUBLISH, GPIO.LOW)
+        self._bt.stop()
+
+    def _blink(self):
+        if self._var_blink:
+            self._var_blink = False
+            GPIO.output(self.LED_PUBLISH, GPIO.LOW)
+        else:
+            self._var_blink = True
+            GPIO.output(self.LED_PUBLISH, GPIO.HIGH)
 
     def _set_record(self):
         self.logger.debug('Set indicator to record ON')
@@ -86,6 +97,26 @@ class Indicator:
     def _clear_record(self):
         self.logger.debug('Set indicator to record OFF')
         GPIO.output(self.LED_RECORD, GPIO.LOW)
+
+
+class BlinkThread(Thread):
+    def __init__(self, dt, func):
+        self.logger = logging.getLogger('app.ioexternal.BlinkThread')
+        self.logger.debug('init')
+        super(BlinkThread, self).__init__()
+        self._keepgoing = True
+        self._time = dt
+        self._fc = func
+
+    def run(self):
+        while self._keepgoing:
+            self.logger.debug('Exec function')
+            self._fc()
+            time.sleep(self._time)
+
+    def stop(self):
+        self.logger.debug('Stop')
+        self._keepgoing = False
 
 
 if __name__ == "__main__":
