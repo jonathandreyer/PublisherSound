@@ -78,14 +78,14 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read(args.c)
 
-    times = config['default']['TimePolling']
+    times = int(config['default']['TimePolling'])
     debug = config['default']['Debug']
     username = config['clyp.it']['User']
     password = config['clyp.it']['Password']
 
     # Read config from command line (override config file)
     if args.time:
-        times = args.time
+        times = int(args.time)
     if args.debug:
         debug = args.d
 
