@@ -104,8 +104,10 @@ if __name__ == "__main__":
 
     ind = Indicator()
     audio = Audio()
-    rec = Recorder(event_btn)
     pub = Publisher(username=username, password=password)
+    rec = Recorder(event_btn)
+
+    logger.info('Ready to record')
 
     periodic_polling = PollingInternet()
     periodic_polling.set_interval(times)
