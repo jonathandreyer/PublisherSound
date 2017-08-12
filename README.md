@@ -48,6 +48,10 @@ pip3 install -r requirements.txt
 ### Script to launch at boot
 
 
+### Create config file with credential
+1. Copy *config_example.ini* to *config.ini*
+2. Change *USERNAME_CLYP* & *PASSWORD_CLYP* with correct credential
+
 
 ## Launch command app.py
 ```
