@@ -79,7 +79,7 @@ if __name__ == "__main__":
     config.read(args.c)
 
     times = int(config['default']['TimePolling'])
-    debug = config['default']['Debug']
+    debug = True if str(config['default']['Debug']).lower() == 'yes' else False
     username = config['clyp.it']['User']
     password = config['clyp.it']['Password']
 
@@ -91,6 +91,8 @@ if __name__ == "__main__":
 
     if debug:
         logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
 
     logger.info('###############################')
     logger.info('#  Service to publish track   #')
