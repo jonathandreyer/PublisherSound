@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import atexit
 import RPi.GPIO as GPIO
 
 
@@ -31,13 +32,15 @@ class Recorder:
         GPIO.setup(self.GPIO_BTN, GPIO.IN)
         GPIO.add_event_detect(self.GPIO_BTN, GPIO.FALLING, callback=self._event, bouncetime=self.BOUNCETIME_MS)
 
+        atexit.register(self._exit)
+
     def _event(self, channel):
         self.logger.debug('event on channel %s' % channel)
         for fc in self._fcs:
             fc()
 
-    def __del__(self):
-        self.logger.debug('del.')
+    def _exit(self):
+        self.logger.debug('exit')
         GPIO.remove_event_detect(self.GPIO_BTN)
         GPIO.cleanup(self.GPIO_BTN)
 
