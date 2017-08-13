@@ -45,6 +45,11 @@ pip3 install -r requirements.txt
 ```
 
 
+### Create config file with credential
+1. Copy file *config_example.ini* to *config.ini*
+2. Change *USERNAME_CLYP* & *PASSWORD_CLYP* with correct credential
+
+
 ### Script to launch at boot
 1. Copy file *app_example.service* to *app.service*
 2. Edit with correct paths to repository (app & config file)
@@ -68,16 +73,10 @@ sudo systemctl status app.service
 ```
 
 
-### Create config file with credential
-1. Copy file *config_example.ini* to *config.ini*
-2. Change *USERNAME_CLYP* & *PASSWORD_CLYP* with correct credential
-
-
 ## Launch command app.py
 ```
 sudo python3 app.py -d
 ```
-
 
 
 ## Sources
