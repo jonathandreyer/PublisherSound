@@ -1,4 +1,4 @@
-# audio-recorder-and-publisher
+# PublisherSound
 
 ## Goal
 Record a sound from input and publish on Clyp.it.
