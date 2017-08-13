@@ -87,7 +87,7 @@ if __name__ == "__main__":
     if args.time:
         times = int(args.time)
     if args.debug:
-        debug = args.d
+        debug = args.debug
 
     if debug:
         logger.setLevel(logging.DEBUG)
