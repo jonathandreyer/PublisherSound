@@ -3,6 +3,7 @@ import logging
 import pyaudio
 import wave
 import os
+import atexit
 from ctypes import *
 from sys import platform as _platform
 
@@ -119,8 +120,10 @@ class Audio:
         else:
             self._base_path = base_path
 
-    def __del__(self):
-        self.logger.debug('del.')
+        atexit.register(self._exit)
+
+    def _exit(self):
+        self.logger.debug('exit')
 
         if self._record_file is not None:
             self._record_file.close()

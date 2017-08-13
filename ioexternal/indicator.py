@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import time
+import atexit
 from threading import Thread
 import RPi.GPIO as GPIO
 
@@ -26,6 +27,8 @@ class Indicator:
         GPIO.setup(self.LED_ALERT, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.LED_PUBLISH, GPIO.OUT, initial=GPIO.LOW)
         GPIO.setup(self.LED_RECORD, GPIO.OUT, initial=GPIO.LOW)
+
+        atexit.register(self._exit)
 
     def cloud_ok(self):
         if self.warning or self.warning is None:
@@ -57,8 +60,8 @@ class Indicator:
             self.record = False
             self._clear_record()
 
-    def __del__(self):
-        self.logger.debug('del.')
+    def _exit(self):
+        self.logger.debug('exit')
         GPIO.cleanup(self.LED_OK)
         GPIO.cleanup(self.LED_ALERT)
         GPIO.cleanup(self.LED_PUBLISH)
