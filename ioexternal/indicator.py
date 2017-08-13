@@ -129,8 +129,6 @@ class BlinkThread(Thread):
 
 
 if __name__ == "__main__":
-    import time
-
     logger = logging.getLogger('app')
 
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(message)s')
