@@ -78,16 +78,16 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read(args.c)
 
-    times = config['default']['TimePolling']
+    times = int(config['default']['TimePolling'])
     debug = config['default']['Debug']
     username = config['clyp.it']['User']
     password = config['clyp.it']['Password']
 
     # Read config from command line (override config file)
     if args.time:
-        times = args.time
+        times = int(args.time)
     if args.debug:
-        debug = args.d
+        debug = args.debug
 
     if debug:
         logger.setLevel(logging.DEBUG)
@@ -104,8 +104,10 @@ if __name__ == "__main__":
 
     ind = Indicator()
     audio = Audio()
-    rec = Recorder(event_btn)
     pub = Publisher(username=username, password=password)
+    rec = Recorder(event_btn)
+
+    logger.info('Ready to record')
 
     periodic_polling = PollingInternet()
     periodic_polling.set_interval(times)

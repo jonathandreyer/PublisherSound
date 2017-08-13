@@ -1,0 +1,11 @@
+[Unit]
+Description=App publisher
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /PATH_APP/app.py -c /PATH_APP/config.ini
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
