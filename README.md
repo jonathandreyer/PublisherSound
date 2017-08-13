@@ -48,6 +48,10 @@ pip3 install -r requirements.txt
 ### Create config file with credential
 1. Copy file *config_example.ini* to *config.ini*
 2. Change *USERNAME_CLYP* & *PASSWORD_CLYP* with correct credential
+3. *(Optional)* Test application without automatic start at boot
+```
+sudo python3 app.py -d
+```
 
 
 ### Script to launch at boot
@@ -72,11 +76,6 @@ sudo systemctl start app.service
 sudo systemctl status app.service
 ```
 
-
-## Launch command app.py
-```
-sudo python3 app.py -d
-```
 
 
 ## Sources
