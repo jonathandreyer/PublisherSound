@@ -93,7 +93,7 @@ if __name__ == "__main__":
         logger.setLevel(logging.DEBUG)
 
     logger.info('###############################')
-    logger.info('#  Start polling service      #')
+    logger.info('#  Service to publish track   #')
     logger.info('###############################')
     logger.info('')
     logger.info('Parameters:')
@@ -102,15 +102,17 @@ if __name__ == "__main__":
         logger.info(' # LOG:   enable')
     logger.info('')
 
-    ind = Indicator()
-    audio = Audio()
-    pub = Publisher(username=username, password=password)
-    rec = Recorder(event_btn)
+    try:
+        ind = Indicator()
+        audio = Audio()
+        pub = Publisher(username=username, password=password)
+        rec = Recorder(event_btn)
 
-    logger.info('Ready to record')
+        logger.info('Ready to record')
 
-    periodic_polling = PollingInternet()
-    periodic_polling.set_interval(times)
-    periodic_polling.run()
-
-    sys.exit()
+        periodic_polling = PollingInternet()
+        periodic_polling.set_interval(times)
+        periodic_polling.run()
+    except KeyboardInterrupt:
+        logger.warning('Quit app by KeyboardInterrupt')
+        sys.exit()
