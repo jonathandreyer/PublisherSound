@@ -3,7 +3,7 @@ import time
 import os
 import logging
 
-from internet.clyp import Clyp
+from internet.whyp import Whyp
 
 
 class Track:
@@ -22,7 +22,7 @@ def file_size_mb(path):
 class Publisher:
     def __init__(self, username, password):
         self.logger = logging.getLogger('app.internet.Publisher')
-        self._c = Clyp(username, password)
+        self._w = Whyp(username, password)
 
     def post(self, path):
         t = Track(path)
@@ -35,10 +35,10 @@ class Publisher:
         self.logger.debug('size of file: ' + str(file_size_mb(t.path)) + ' Mb')
 
         #time.sleep(file_size_mb(t.path))
-        res = self._c.post_track(t)
+        res = self._w.post_track(t)
 
         if res:
-            self.logger.debug('Upload to Clyp OK, file is removed')
+            self.logger.debug('Upload to Whyp OK, file is removed')
             os.remove(t.path)
 
 
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     MP3_PATH_2 = 'PATH/file2.mp3'
     MP3_PATH_3 = 'PATH/file3.mp3'
 
-    pub = Publisher('USERNAME_CLYP', 'PASSWORD_CLYP')
+    pub = Publisher('USERNAME_WHYP', 'PASSWORD_WHYP')
 
     logger.info('Post N°1')
     pub.post(MP3_PATH_1)
