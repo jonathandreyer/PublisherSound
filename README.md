@@ -1,7 +1,7 @@
 # PublisherSound
 
 ## Goal
-Record a sound from input and publish on Clyp.it.
+Record a sound from input and publish on Whyp.it.
 
 
 ## Materiel used
@@ -47,7 +47,7 @@ pip3 install -r requirements.txt
 
 ### Create config file with credential
 1. Copy file *config_example.ini* to *config.ini*
-2. Change *USERNAME_CLYP* & *PASSWORD_CLYP* with correct credential
+2. Change *USERNAME_WHYP* & *PASSWORD_WHYP* with correct credential
 3. *(Optional)* Test application without automatic start at boot
 ```
 sudo python3 app.py -d

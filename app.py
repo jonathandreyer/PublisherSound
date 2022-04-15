@@ -80,8 +80,8 @@ if __name__ == "__main__":
 
     times = int(config['default']['TimePolling'])
     debug = True if str(config['default']['Debug']).lower() == 'yes' else False
-    username = config['clyp.it']['User']
-    password = config['clyp.it']['Password']
+    username = config['whyp.it']['User']
+    password = config['whyp.it']['Password']
 
     # Read config from command line (override config file)
     if args.time:
