@@ -596,5 +596,6 @@ def get_random_name(sep='_'):
             continue
         return name
 
+
 if __name__ == '__main__':
     print(get_random_name())
